@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useState } from "react"
-import { db } from "../firebase/config"
+import { db } from "../firebase"
 import { collection, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore'
 
 let initialState = {

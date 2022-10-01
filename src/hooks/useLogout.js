@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react'
-import { auth, db } from '../firebase/config'
+import { auth, db } from '../firebase'
 import { useAuthContext } from './useAuthContext'
 
 export const useLogout = () => {
