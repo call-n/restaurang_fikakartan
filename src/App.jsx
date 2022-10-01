@@ -1,8 +1,9 @@
+import Map from './components/Map'
 function App() {
 
   return (
     <div>
-      fikakartan
+        <Map />
     </div>
   )
 }
