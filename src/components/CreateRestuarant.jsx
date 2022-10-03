@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Container from 'react-bootstrap/Container'
+import GoogleApi from '../services/GoogleApi'
 
 const CreateRestaurantForm = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
@@ -21,6 +22,7 @@ const CreateRestaurantForm = () => {
             website: data.website,
             facebook: data.facebook,
             instagram: data.instagram,
+            coordinates: await GoogleApi.LatLong(data.address + data.city),
         })
         reset() 
         console.log(data);
