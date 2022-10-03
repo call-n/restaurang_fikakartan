@@ -1,8 +1,14 @@
 import CreateRestaurantForm from "../components/CreateRestuarant"
+import TipForm from '../components/RestaurantsTipForm'
 
 const CreateRestaurantPage = () => {
-    return(
-        <CreateRestaurantForm/>
+    return( 
+        <>
+            <CreateRestaurantForm/>
+            <TipForm/>
+        </>
+
+
     )
 }
 
