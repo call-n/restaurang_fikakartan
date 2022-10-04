@@ -5,6 +5,7 @@ import mapAPI from '../services/MapAPI'
 import Button from 'react-bootstrap/Button'
 import Search from './Search'
 import {GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api'
+import useStreamCollection from '../hooks/useStreamCollection'
 
 const libraries = ['places']
 
@@ -15,7 +16,7 @@ const mapContainer = {
 }
 
 const Map = () => {
-    
+    const {data: restaurants} = useStreamCollection("restaurants")
     const { isLoaded } = useJsApiLoader({mapsAPIKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,libraries})
 
     const [pos, setPos] = useState({lat: 56.3768708, lng: 13.9306438})
@@ -48,7 +49,7 @@ const Map = () => {
         {isLoaded && (
             <>
                 <Search onSubmit={handleSubmit} />
-                <Button onClick={getCurrentLocation}>Find Me</Button>
+                <Button onClick={getCurrentLocation} variant="dark">Find Me</Button>
 
                 <GoogleMap
                     center={pos}
@@ -58,6 +59,15 @@ const Map = () => {
 
                     {userPos && (
                         <Marker position={userPos}/>
+                    )}
+
+
+                    {}
+
+                    { restaurants && (
+                        restaurants.map((restaurant) => (
+                            <Marker key={restaurant.id} position={{lat: restaurant.coordinates.lat, lng: restaurant.coordinates.lng}}/> 
+                        ))
                     )}
 
                 </GoogleMap>
