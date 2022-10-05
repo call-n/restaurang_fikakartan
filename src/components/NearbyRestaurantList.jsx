@@ -15,11 +15,25 @@ const NearbyRestaurantList = ({ city }) => {
   return (
     <div>
         {restaurants && (
-            <ul>
-                {restaurants.map(r => (
-                    <li key={r.id}>{r.name}</li>
-                ))}
-            </ul>
+            <>
+                {!city &&(
+                    <ul>
+                        <h2>All restaurants</h2>
+                        {data.map((r) => (
+                            <li key={r.id}>{r.name}</li>
+                        ))}
+                    </ul>
+                )}
+
+                {city && (
+                    <ul>
+                        <h2>Restaurants in {city}</h2>
+                        {restaurants.map((r) => (
+                            <li key={r.id}>{r.name}</li>
+                        ))}
+                    </ul>
+                )}
+            </>
         )}
     </div>
   )
