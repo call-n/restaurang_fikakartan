@@ -7,6 +7,7 @@ import Search from './Search'
 import {GoogleMap, useJsApiLoader, Marker, InfoWindow} from '@react-google-maps/api'
 import useStreamCollection from '../hooks/useStreamCollection'
 import NearbyRestaurantList from './NearbyRestaurantList'
+import Directions from './Directions'
 
 
 const libraries = ['places']
@@ -95,7 +96,7 @@ const Map = () => {
                                 <p>{selectedRestaurant.city}</p>
                                 <p>{selectedRestaurant.address}</p>
                                 <p>{selectedRestaurant.selection}</p>
-                                <Button>Get directions</Button>
+                                <Directions restaurant={selectedRestaurant} />
                             </div>
                         </InfoWindow>
                     )}
