@@ -21,15 +21,15 @@ const Map = () => {
 
     const [pos, setPos] = useState({lat: 56.3768708, lng: 13.9306438})
     const [userPos, setUserPos] = useState("")
+    const [city, setCity] = useState(null)
 
 
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
-            const userPos={
+            setUserPos({
               lat: position.coords.latitude,
               lng: position.coords.longitude,
-            }
-            setUserPos(userPos)
+            })
         })
     }
 
@@ -38,6 +38,7 @@ const Map = () => {
 
         console.log('cords:',address)
         setPos(cords)
+        setCity(address)
     }
 
   return (
@@ -61,15 +62,18 @@ const Map = () => {
                         <Marker position={userPos}/>
                     )}
 
-
-                    {}
-
-                    { restaurants && (
+                    
+                    {!city && (
                         restaurants.map((restaurant) => (
-                            <Marker key={restaurant.id} position={{lat: restaurant.coordinates.lat, lng: restaurant.coordinates.lng}}/> 
+                            <Marker key={restaurant.id} position={{lat:restaurant.coordinates.lat, lng:restaurant.coordinates.lng}}/>
                         ))
                     )}
 
+                    {city && (
+                        restaurants.filter((restaurant) => restaurant.city == city).map((fRestaurant) => (
+                            <Marker key={fRestaurant.id} position={{lat:fRestaurant.coordinates.lat, lng:fRestaurant.coordinates.lng}} />
+                        ))
+                    )}
                 </GoogleMap>
 
             </>
