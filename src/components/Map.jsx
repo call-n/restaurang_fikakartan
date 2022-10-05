@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button'
 import Search from './Search'
 import {GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api'
 import useStreamCollection from '../hooks/useStreamCollection'
+import NearbyRestaurantList from './NearbyRestaurantList'
+
 
 const libraries = ['places']
 
@@ -22,7 +24,7 @@ const Map = () => {
     const [pos, setPos] = useState({lat: 56.3768708, lng: 13.9306438})
     const [userPos, setUserPos] = useState("")
     const [city, setCity] = useState(null)
-
+    const [showList, setShowList] = useState(false)
 
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -41,6 +43,10 @@ const Map = () => {
         setCity(address)
     }
 
+    const toggleList = async () => {
+        setShowList(!showList)
+    }
+
   return (
     <>
         {!isLoaded && (
@@ -51,6 +57,12 @@ const Map = () => {
             <>
                 <Search onSubmit={handleSubmit} />
                 <Button onClick={getCurrentLocation} variant="dark">Find Me</Button>
+                <Button onClick={toggleList}>Show List</Button>
+                
+
+                {showList &&(
+                    <NearbyRestaurantList city={city}/>
+                )}
 
                 <GoogleMap
                     center={pos}
@@ -59,7 +71,7 @@ const Map = () => {
                 >
 
                     {userPos && (
-                        <Marker position={userPos}/>
+                        <Marker position={userPos} label="Me"/>
                     )}
 
                     
