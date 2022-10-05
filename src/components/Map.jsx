@@ -40,7 +40,7 @@ const Map = () => {
 
         console.log('cords:',address)
         setPos(cords)
-        setCity(address)
+        setCity(await mapAPI.getAddress(cords.lat,cords.lng))
     }
 
     const toggleList = async () => {
