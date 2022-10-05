@@ -4,7 +4,7 @@ import {useState} from 'react'
 import mapAPI from '../services/MapAPI'
 import Button from 'react-bootstrap/Button'
 import Search from './Search'
-import {GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api'
+import {GoogleMap, useJsApiLoader, Marker, InfoWindow} from '@react-google-maps/api'
 import useStreamCollection from '../hooks/useStreamCollection'
 import NearbyRestaurantList from './NearbyRestaurantList'
 
@@ -25,6 +25,9 @@ const Map = () => {
     const [userPos, setUserPos] = useState("")
     const [city, setCity] = useState(null)
     const [showList, setShowList] = useState(false)
+    const [selectedRestaurant, setSelectedRestaurant] = useState(null)
+
+
 
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -37,8 +40,6 @@ const Map = () => {
 
     const handleSubmit = async (address) => {
         const cords = await mapAPI.getLatLong(address)
-
-        console.log('cords:',address)
         setPos(cords)
         setCity(await mapAPI.getAddress(cords.lat,cords.lng))
     }
@@ -69,7 +70,7 @@ const Map = () => {
                     mapContainerStyle={mapContainer}
                     zoom={12}
                 >
-
+                    
                     {userPos && (
                         <Marker position={userPos} label="Me"/>
                     )}
@@ -77,17 +78,28 @@ const Map = () => {
                     
                     {!city && (
                         restaurants.map((restaurant) => (
-                            <Marker key={restaurant.id} position={{lat:restaurant.coordinates.lat, lng:restaurant.coordinates.lng}}/>
+                            <Marker onClick={ () =>{setSelectedRestaurant(restaurant)}} key={restaurant.id} position={{lat:restaurant.coordinates.lat, lng:restaurant.coordinates.lng}}/>
                         ))
                     )}
 
                     {city && (
                         restaurants.filter((restaurant) => restaurant.city == city).map((fRestaurant) => (
-                            <Marker key={fRestaurant.id} position={{lat:fRestaurant.coordinates.lat, lng:fRestaurant.coordinates.lng}} />
+                            <Marker onClick={ () => {setSelectedRestaurant(fRestaurant)}} key={fRestaurant.id} position={{lat:fRestaurant.coordinates.lat, lng:fRestaurant.coordinates.lng}} />
                         ))
                     )}
-                </GoogleMap>
 
+                    {selectedRestaurant && (
+                        <InfoWindow onCloseClick={() => {setSelectedRestaurant(null)}} position={{lat: selectedRestaurant.coordinates.lat, lng: selectedRestaurant.coordinates.lng}}>
+                            <div>
+                                <h2>{selectedRestaurant.name}</h2>
+                                <p>{selectedRestaurant.city}</p>
+                                <p>{selectedRestaurant.address}</p>
+                                <p>{selectedRestaurant.selection}</p>
+                                <Button>Get directions</Button>
+                            </div>
+                        </InfoWindow>
+                    )}
+                </GoogleMap>
             </>
          )}
     </> 

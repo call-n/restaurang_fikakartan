@@ -18,7 +18,7 @@ const Search = ({ onSubmit }) => {
         console.log('Searcing for:', searchRef.current.value)
     }
   return (
-      <Form onSubmit={handleSubmit} className="d-flex flex-row"> 
+      <Form onSubmit={handleSubmit} className="d-flex mb-3">  
           <Form.Group>
               <Autocomplete>
                   <Form.Control
@@ -27,8 +27,8 @@ const Search = ({ onSubmit }) => {
                         ref={searchRef}
                   />
               </Autocomplete>
-          <Button type="submit" variant="dark">Search!</Button>
           </Form.Group>
+          <Button type="submit" variant="dark">Search!</Button>
       </Form>
   )
 }
