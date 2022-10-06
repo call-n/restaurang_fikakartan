@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage'
 import RestaurantPage from './pages/RestaurantPage'
 import UpdateRestaurantPage from './pages/UpdateRestaurantPage'
 import TipsPage from './pages/TipsPage'
+import TipPage from './pages/TipPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import PageNotFound from './pages/PageNotFound'
@@ -22,7 +23,6 @@ function App() {
           <Navigation/>
           <Routes>
             <Route path='/' element={<HomePage/>}/>
-
             <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
             <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
 
@@ -31,6 +31,7 @@ function App() {
             <Route path='restaurant/:id' element={!user ? <Navigate to="/login" /> : <RestaurantPage />}/>
             <Route path='/restaurants' element={!user ? <Navigate to="/login" /> : <RestaurantsPage />}/>
             <Route path='/tips' element={!user ? <Navigate to="/login" /> : <TipsPage />} />
+            <Route path='/tip/:id' element={!user ? <Navigate to="/login" /> : <TipPage />} />
             <Route path="*" element={<PageNotFound />} />
             
           </Routes>
