@@ -3,51 +3,48 @@ import Image from 'react-bootstrap/Image'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import { Link, NavLink } from 'react-router-dom'
-// import { useAuthContext } from '../contexts/AuthContext'
+import { useAuthContext } from '../hooks/useAuthContext'
 import { NavDropdown } from 'react-bootstrap'
+import { useLogout } from '../hooks/useLogout'
 
 const Navigation = () => {
-	// const { currentUser, userName, userEmail, userPhotoUrl } = useAuthContext()
+	const { user } = useAuthContext()
+	const { logout, isPending } = useLogout()
 
 	return (
 		<Navbar bg="dark" variant="dark" expand="md">
 			<Container>
 				<Navbar.Brand as={Link} to="/">
-					Firebase Todos
+					Kaffe Kaga Karta
 				</Navbar.Brand>
 
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto align-items-center">
 						{
-							// currentUser ? (
-							// 	<>
-							// 		{/* User is logged in */}
-							// 		<Nav.Link as={NavLink} end to="/todos">Todos</Nav.Link>
+							user ? (
+								<>
+									{/* User is logged in */}
 
-							// 		<NavDropdown title={
-							// 			userPhotoUrl
-							// 				? <Image
-							// 					src={userPhotoUrl}
-							// 					height={30}
-							// 					width={30}
-							// 					fluid
-							// 					roundedCircle
-							// 				  />
-							// 				: userName || userEmail
-							// 		}>
-							// 			<NavLink to="/update-profile" className="dropdown-item">Update Profile</NavLink>
-							// 			<NavDropdown.Divider />
-							// 			<NavLink to="/logout" className="dropdown-item">Log Out</NavLink>
-							// 		</NavDropdown>
-							// 	</>
-							// ) : (
-							// 	<>
-							// 		{/* No user is logged in */}
-							// 		<Nav.Link as={NavLink} to="/login">Login</Nav.Link>
-							// 		<Nav.Link as={NavLink} to="/signup">Signup</Nav.Link>
-							// 	</>
-							// )
+									<NavDropdown title='Press'>
+										<NavLink to='/restaurants' className='dropdown-item'>Restaurants</NavLink>
+										<NavLink to='/tips' className='dropdown-item'>Pending Tips</NavLink>
+										<NavDropdown.Divider />
+										{user && (
+											<li>
+												{!isPending && <button className="btn" onClick={logout}>Logout</button>}
+												{isPending && <button className="btn" disabled>Logging out...</button>}
+											</li>
+											)}
+									</NavDropdown>
+								</>
+							) : (
+								<>
+									{/* No user is logged in */}
+									<Nav.Link as={NavLink} to="/login">Login</Nav.Link>
+									<Nav.Link as={NavLink} to="/signup">Signup</Nav.Link>
+								</>
+							)
 						}
 					</Nav>
 				</Navbar.Collapse>
