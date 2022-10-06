@@ -28,7 +28,7 @@ const Search = ({ onSubmit }) => {
                   />
               </Autocomplete>
           </Form.Group>
-          <Button type="submit" variant="dark">Search!</Button>
+          <Button className='m-1' type="submit" variant="dark">Search!</Button>
       </Form>
   )
 }

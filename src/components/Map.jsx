@@ -8,6 +8,7 @@ import {GoogleMap, useJsApiLoader, Marker, InfoWindow} from '@react-google-maps/
 import useStreamCollection from '../hooks/useStreamCollection'
 import NearbyRestaurantList from './NearbyRestaurantList'
 import Directions from './Directions'
+import {Link} from 'react-router-dom'
 
 
 const libraries = ['places']
@@ -56,10 +57,11 @@ const Map = () => {
         {isLoaded && (
             <>
                 <div className="d-flex m-3">
-                    <div className="d-flex flex-row ">
+                    <div className="d-flex flex-row">
                         <Search onSubmit={handleSubmit} />
-                        <Button onClick={getCurrentLocation} variant="dark">Find Me</Button>
-                        <Button  variant="dark" onClick={toggleList}>Show List</Button>    
+                        <Button className='m-1' onClick={getCurrentLocation} variant="dark">Find Me</Button>
+                        <Button className='m-1'  variant="dark" onClick={toggleList}>Show List</Button>    
+                        <Button className='m-1' variant='dark' as={Link} to='/create-tip'>Suggest Restaurant</Button>
                     </div>
 
                 </div>
