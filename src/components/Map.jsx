@@ -21,13 +21,11 @@ const mapContainer = {
 const Map = () => {
     const {data: restaurants} = useStreamCollection("restaurants")
     const { isLoaded } = useJsApiLoader({mapsAPIKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,libraries})
-
     const [pos, setPos] = useState({lat: 56.3768708, lng: 13.9306438})
     const [userPos, setUserPos] = useState("")
     const [city, setCity] = useState(null)
     const [showList, setShowList] = useState(false)
     const [selectedRestaurant, setSelectedRestaurant] = useState(null)
-
 
 
     const getCurrentLocation = () => {
@@ -57,11 +55,14 @@ const Map = () => {
 
         {isLoaded && (
             <>
-                <Search onSubmit={handleSubmit} />
-                <Button onClick={getCurrentLocation} variant="dark">Find Me</Button>
-                <Button onClick={toggleList}>Show List</Button>
-                
+                <div className="d-flex m-3">
+                    <div className="d-flex flex-row ">
+                        <Search onSubmit={handleSubmit} />
+                        <Button onClick={getCurrentLocation} variant="dark">Find Me</Button>
+                        <Button  variant="dark" onClick={toggleList}>Show List</Button>    
+                    </div>
 
+                </div>
                 {showList &&(
                     <NearbyRestaurantList city={city}/>
                 )}

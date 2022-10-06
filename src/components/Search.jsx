@@ -18,7 +18,7 @@ const Search = ({ onSubmit }) => {
         console.log('Searcing for:', searchRef.current.value)
     }
   return (
-      <Form onSubmit={handleSubmit} className="d-flex mb-3">  
+      <Form onSubmit={handleSubmit} className="d-flex">  
           <Form.Group>
               <Autocomplete>
                   <Form.Control
