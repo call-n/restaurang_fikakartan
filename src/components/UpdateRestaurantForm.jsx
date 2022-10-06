@@ -151,6 +151,8 @@ const UpdateRestaurantForm = ({restaurant}) => {
                             {...register('instagram')}
                             />
                         </Form.Group>
+
+                        <Button type='submit'>Update</Button>
                 </Form>
             </Card.Body>
         </Card>
