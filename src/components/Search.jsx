@@ -7,6 +7,7 @@ const Search = ({ onSubmit }) => {
 
     const searchRef = useRef()
 
+    // Submit the search ref to caller
     const handleSubmit = (e) => {
         e.preventDefault()
 
@@ -15,7 +16,6 @@ const Search = ({ onSubmit }) => {
         }
 
         onSubmit(searchRef.current.value)
-        console.log('Searcing for:', searchRef.current.value)
     }
   return (
       <Form onSubmit={handleSubmit} className="d-flex">  

@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 const UpdateRestaurantForm = ({restaurant}) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
 
+    // Update document in 'restaurants' collection
     const onUpdateRestaurant = async (data) => {
         await updateDoc(doc(db, 'restaurants', restaurant.id), {
             name: data.name,

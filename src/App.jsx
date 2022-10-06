@@ -24,11 +24,14 @@ function App() {
         <>
           <Navigation/>
           <Routes>
+            {/* Public Routes */}
             <Route path='/' element={<HomePage/>}/>
             <Route path='/create-tip' element={<CreateTipPage/>}/>
             <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
             <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
+            <Route path="*" element={<PageNotFound />} />
 
+            {/* Protected routes */}
             <Route path='update-restaurant/:id' element={!user ? <Navigate to="/login" /> : <UpdateRestaurantPage />}/>
             <Route path='/create-restaurant' element={!user ? <Navigate to="/login" /> : <CreateRestaurantPage />}/>
             <Route path='restaurant/:id' element={!user ? <Navigate to="/login" /> : <RestaurantPage />}/>
@@ -36,8 +39,7 @@ function App() {
             <Route path='/tips' element={!user ? <Navigate to="/login" /> : <TipsPage />} />
             <Route path='/tip/:id' element={!user ? <Navigate to="/login" /> : <TipPage />} />
             <Route path='/admin' element={!user ? <Navigate to="/login" /> : <AdminPage />} />
-            <Route path="*" element={<PageNotFound />} />
-            
+
           </Routes>
         </>
       )}

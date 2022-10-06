@@ -4,8 +4,10 @@ import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 const Directions = ({restaurant}) => {
 
+    // states
     const [pos, setPos] = useState(null)
 
+    // Gets user posistion and passes into a object
     const getPos  = () => {
          navigator.geolocation.getCurrentPosition((p) => {
             setPos({
@@ -17,6 +19,7 @@ const Directions = ({restaurant}) => {
     
     return (
         <>
+            {/** If we dont have the user pos get it, after show button that links to google maps with directions to set place */}
             {!pos && (
                 <div>
                     <p>Get directions from your location</p>

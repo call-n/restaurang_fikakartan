@@ -16,12 +16,18 @@ const libraries = ['places']
 
 const mapContainer = {
     widht: '100vw',
-    height: '100vh'
+    height: '100vh',
 }
 
 const Map = () => {
+
+    // Get restaurants from db
     const {data: restaurants} = useStreamCollection("restaurants")
+
+    // load map api
     const { isLoaded } = useJsApiLoader({mapsAPIKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,libraries})
+
+    // states
     const [pos, setPos] = useState({lat: 56.3768708, lng: 13.9306438})
     const [userPos, setUserPos] = useState("")
     const [city, setCity] = useState(null)
@@ -29,6 +35,7 @@ const Map = () => {
     const [selectedRestaurant, setSelectedRestaurant] = useState(null)
 
 
+    // Get users location
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
             setUserPos({
@@ -38,13 +45,17 @@ const Map = () => {
         })
     }
 
+
+    // get lat lng for the city searched and move map there
     const handleSubmit = async (address) => {
         const cords = await mapAPI.getLatLong(address)
         setPos(cords)
         setCity(await mapAPI.getAddress(cords.lat,cords.lng))
     }
 
-    const toggleList = async () => {
+
+    // toggle to show list or not
+    const toggleList = () => {
         setShowList(!showList)
     }
 
@@ -73,6 +84,7 @@ const Map = () => {
                     center={pos}
                     mapContainerStyle={mapContainer}
                     zoom={12}
+                    className="map"
                 >
                     
                     {userPos && (
@@ -86,12 +98,14 @@ const Map = () => {
                         ))
                     )}
 
+                    {/**If we have city then filter the restaurants to show onyl those in city */}
                     {city && (
                         restaurants.filter((restaurant) => restaurant.city == city).map((fRestaurant) => (
                             <Marker onClick={ () => {setSelectedRestaurant(fRestaurant)}} key={fRestaurant.id} position={{lat:fRestaurant.coordinates.lat, lng:fRestaurant.coordinates.lng}} />
                         ))
                     )}
 
+                    {/**Show info window for clicked marker/restaurant on map */}
                     {selectedRestaurant && (
                         <InfoWindow onCloseClick={() => {setSelectedRestaurant(null)}} position={{lat: selectedRestaurant.coordinates.lat, lng: selectedRestaurant.coordinates.lng}}>
                             <div>
