@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import PageNotFound from './pages/PageNotFound'
 import CreateTipPage from './pages/CreateTipPage'
+import AdminPage from './pages/AdminPage'
 
 function App() {
   const { authIsReady, user } = useAuthContext()
@@ -34,6 +35,7 @@ function App() {
             <Route path='/restaurants' element={!user ? <Navigate to="/login" /> : <RestaurantsPage />}/>
             <Route path='/tips' element={!user ? <Navigate to="/login" /> : <TipsPage />} />
             <Route path='/tip/:id' element={!user ? <Navigate to="/login" /> : <TipPage />} />
+            <Route path='/admin' element={!user ? <Navigate to="/login" /> : <AdminPage />} />
             <Route path="*" element={<PageNotFound />} />
             
           </Routes>

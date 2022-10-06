@@ -27,6 +27,7 @@ const Navigation = () => {
 									{/* User is logged in */}
 
 									<NavDropdown title='Press'>
+										<NavLink to='/admin' className='dropdown-item'>User List</NavLink>
 										<NavLink to='/restaurants' className='dropdown-item'>Restaurants</NavLink>
 										<NavLink to='/tips' className='dropdown-item'>Pending Tips</NavLink>
 										<NavDropdown.Divider />
