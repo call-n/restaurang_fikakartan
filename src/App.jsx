@@ -23,11 +23,13 @@ function App() {
           <Routes>
             <Route path='/' element={<HomePage/>}/>
 
-            <Route path='update-restaurant/:id' element={<UpdateRestaurantPage/>}/>
-            <Route path='/create-restaurant' element={<CreateRestaurantPage/>}/>
-            <Route path='restaurant/:id' element={<RestaurantPage/>}/>
-            <Route path='/restaurants' element={<RestaurantsPage/>}/>
-            <Route path='/tips' element={<TipsPage/>} />
+            <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
+
+            <Route path='update-restaurant/:id' element={!user ? <Navigate to="/login" /> : <UpdateRestaurantPage />}/>
+            <Route path='/create-restaurant' element={!user ? <Navigate to="/login" /> : <CreateRestaurantPage />}/>
+            <Route path='restaurant/:id' element={!user ? <Navigate to="/login" /> : <RestaurantPage />}/>
+            <Route path='/restaurants' element={!user ? <Navigate to="/login" /> : <RestaurantsPage />}/>
+            <Route path='/tips' element={!user ? <Navigate to="/login" /> : <TipsPage />} />
             <Route path="*" element={<PageNotFound />} />
             
           </Routes>
