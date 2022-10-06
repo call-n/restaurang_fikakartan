@@ -26,7 +26,17 @@ const Navigation = () => {
 								<>
 									{/* User is logged in */}
 
-									<NavDropdown title='Press'>
+									<NavDropdown title={
+										user.photoURL
+											? <Image
+												src={user.photoURL}
+												height={30}
+												width={40}
+												fluid
+												roundedCircle
+											  />
+											: user.name || user.email
+									}>
 										<NavLink to='/admin' className='dropdown-item'>User List</NavLink>
 										<NavLink to='/create-restaurant' className='dropdown-item'>Create Restaurant</NavLink>
 										<NavLink to='/restaurants' className='dropdown-item'>Restaurants</NavLink>
