@@ -26,34 +26,6 @@ const RestaurantsPage = () => {
                 Header: 'Description',
                 accessor: 'description'
             },
-            // {
-            //     Header: 'Type of restaurant',
-            //     accessor: 'type'
-            // },
-            // {
-            //     Header: 'Restaurants selection',
-            //     accessor: 'selection'
-            // },
-            // {
-            //     Header: 'Phone',
-            //     accessor: 'phone'
-            // },
-            // {
-            //     Header: 'Email',
-            //     accessor: 'email'
-            // },
-            // {
-            //     Header: 'Website',
-            //     accessor: 'website'
-            // },
-            // {
-            //     Header: 'Facebook',
-            //     accessor: 'facebook'
-            // },
-            // {
-            //     Header: 'Instagram',
-            //     accessor: 'instagram'
-            // },
             {
                 Header: 'More Info',
                 Cell: ({row: {original: restaurant}}) =>
@@ -70,19 +42,17 @@ const RestaurantsPage = () => {
 
     return(
         <>
-        
-        <Container className="my-3">
-            <Container>
-            <h1>All resaurants</h1>
+            <Container className="my-3">
+                <Container>
+                    <h1>All resaurants</h1>
 
-{isLoading && (<p>Loading...</p>)}
+                    {isLoading && (<p>Loading...</p>)}
 
-{isError && (<p>{error.message}</p>)}
+                    {isError && (<p>{error.message}</p>)}
 
-{restaurants && <SortableTable columns={columns} data={restaurants}/>}
+                    {restaurants && <SortableTable columns={columns} data={restaurants}/>}
+                </Container>
             </Container>
-
-        </Container>
         </>
     )
 }

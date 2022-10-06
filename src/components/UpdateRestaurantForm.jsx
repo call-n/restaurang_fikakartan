@@ -1,5 +1,5 @@
 import {Col, Card, Form, Button } from 'react-bootstrap'
-import { doc, updateDoc, Timestamp } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useForm } from 'react-hook-form'
 
