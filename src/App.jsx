@@ -1,10 +1,16 @@
-import Map from './components/Map'
 import './assets/App.scss'
+import {Routes, Route} from 'react-router-dom'
+
+import HomePage from './pages/HomePage'
+import NotFound from './pages/NotFoundPage'
 function App() {
 
   return (
     <div>
-        <Map />
+        <Routes>
+            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<HomePage />} />
+        </Routes>
     </div>
   )
 }
