@@ -24,7 +24,7 @@ const TipsPage = () => {
             {
                 Header: 'Show tip',
                 Cell: ({row: {original: tip}}) =>
-                <Button as={Link} to={`/tips/${tip.id}`}>
+                <Button as={Link} to={`/tip/${tip.id}`}>
                     Show tip
                 </Button>
             }
