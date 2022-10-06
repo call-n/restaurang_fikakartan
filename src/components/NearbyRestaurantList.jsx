@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import useStreamCollection from '../hooks/useStreamCollection'
 import Form from 'react-bootstrap/Form'
-
+import RestaurantListCard from './RestaurantListCard'
 
 const NearbyRestaurantList = ({ city }) => {
 
@@ -23,7 +23,7 @@ const NearbyRestaurantList = ({ city }) => {
             <Form.Select onChange={(e) => {setTypeFilter(e.target.value)}} defaultValue="all" className="w-25">
                 <option value="">All</option>
                 <option value="snabbmat">Snabbmat</option>
-                <option value="foodtruck"></option>
+                <option value="foodtruck">Foodtruck</option>
                 <option value="cafe">Café</option>
                 <option value="pizzarias">Pizza</option>
             </Form.Select>
@@ -39,25 +39,34 @@ const NearbyRestaurantList = ({ city }) => {
                 <option value="fika">Fika</option>
             </Form.Select>
         </Form.Group>
-
-
-        <div>
+        
+        <div className="list">
             {restaurants && (
                 <>
+                    {/** if we dont have filter or city show all */}
                     {!city && !typeFilter &&(
                         <ul>
                             <h2>All restaurants</h2>
                             {data.map((r) => (
-                                <li key={r.id}>{r.name}</li>
+                                <li> <RestaurantListCard restaurant={r} /></li>
                             ))}
                         </ul>
                     )}
-
+                    {/**if we have city then show all in that city */}
                     {city && !typeFilter && (
                         <ul>
                             <h2>Restaurants in {city}</h2>
                             {restaurants.map((r) => (
-                                <li key={r.id}>{r.name}</li>
+                                <li><RestaurantListCard restaurant={r}/></li>
+                            ))}
+                        </ul>
+                    )}
+
+                    {/** filter restaurant by type and city */}
+                    {city && typeFilter && (
+                        <ul>
+                            {restaurants.filter((r) => r.type == typeFilter).map((r) => (
+                                <li><RestaurantListCard restaurant={r}/></li>
                             ))}
                         </ul>
                     )}
