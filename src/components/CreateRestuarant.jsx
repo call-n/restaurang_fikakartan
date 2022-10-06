@@ -3,6 +3,7 @@ import { db } from '../firebase'
 import { useForm } from 'react-hook-form'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import GoogleApi from '../services/GoogleApi'
 
@@ -29,11 +30,11 @@ const CreateRestaurantForm = () => {
     }
 
     return (
-                <Container>
+                <Container >
 
                     <Form onSubmit={handleSubmit(onCreateRestaurant)} noValidate>
 
-                        <Form.Group controlId='name' className='mb-5'>
+                        <Form.Group as={Col} controlId='name' className='mb-2'>
                             <Form.Label>Name</Form.Label>
                             <Form.Control {...register("name", {
                                 required: "Please enter a name",
@@ -45,7 +46,7 @@ const CreateRestaurantForm = () => {
                             {errors.name && <span>{errors.name.message}</span>}
                         </Form.Group>
 
-                        <Form.Group controlId='address' className='mb-3'>
+                        <Form.Group controlId='address' className='mb-2'>
                             <Form.Label>Address</Form.Label>
                             <Form.Control {...register('address', {
                                 required: 'Please enter an address',
@@ -57,7 +58,7 @@ const CreateRestaurantForm = () => {
                             {errors.address && <span>{errors.address.message}</span>}
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='city'>
+                        <Form.Group className='mb-2' controlId='city'>
                             <Form.Label>City</Form.Label>
                             <Form.Control {...register('city', {
                                 required: 'Please enter a city',
@@ -69,7 +70,7 @@ const CreateRestaurantForm = () => {
                             {errors.city && <span>{errors.city.message}</span>}
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='description'>
+                        <Form.Group className='mb-2' controlId='description'>
                             <Form.Label>Description</Form.Label>
                             <Form.Control 
                                 {...register('description', {
@@ -78,24 +79,25 @@ const CreateRestaurantForm = () => {
                                     value: 3,
                                     message: 'The description needs to be 3 characters long',
                                 }, 
-                            })} type='text' />
+                            })} type='text' as='textarea' />
                             {errors.description && <span>{errors.description.message}</span>}
                         </Form.Group>
 
-                         <Form.Group className='mb-3' controlId='type'>
+                         <Form.Group className='mb-2' controlId='type'>
                             <Form.Label>Type of restaurant</Form.Label>
                             <Form.Select {...register('type', {
                                 required: 'Please select the type of restaurant',
                             })}>
                                 <option value='fastfood'>Fastfood</option>
-                                <option value='finedining'>Fine Dining</option>
+                                <option value='restaurant'>Restaurant</option>
                                 <option value='pizzeria'>Pizzeria</option>
                                 <option value='foodtruck'>Foodtruck</option>
+                                <option value='cafe'>Café</option>
                             </Form.Select>
                             {errors.type && <span>{errors.type.message}</span>}
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='selection'>
+                        <Form.Group className='mb-2' controlId='selection'>
                             <Form.Label>Restaurant selection</Form.Label>
                             <Form.Select {...register('selection', {
                                 required: 'Please select the restaurants selection',
@@ -103,36 +105,37 @@ const CreateRestaurantForm = () => {
                                 <option value='lunch'>Lunch</option>
                                 <option value='afterwork'>Afterwork</option>
                                 <option value='dinner'>Dinner</option>
+                                <option value='fika'>"Fika"</option>
                             </Form.Select>
                             {errors.selection && <span>{errors.selection.message}</span>}
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='email'>
+                        <Form.Group className='mb-2' controlId='email'>
                             <Form.Label>Email</Form.Label>
                             <Form.Control {...register('email')}/>
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='phone'>
+                        <Form.Group className='mb-2' controlId='phone'>
                             <Form.Label>Phone</Form.Label>
                             <Form.Control {...register('phone')}/>
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='website'>
+                        <Form.Group className='mb-2' controlId='website'>
                             <Form.Label>Website</Form.Label>
                             <Form.Control {...register('website')}/>
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='facebook'>
+                        <Form.Group className='mb-2' controlId='facebook'>
                             <Form.Label>Facebook</Form.Label>
                             <Form.Control {...register('facebook')}/>
                         </Form.Group>
 
-                        <Form.Group className='mb-3' controlId='instagram'>
+                        <Form.Group className='mb-2' controlId='instagram'>
                             <Form.Label>Instagram</Form.Label>
                             <Form.Control {...register('instagram')}/>
                         </Form.Group>
 
-                        <Button variant='success' type="submit">Add</Button>
+                        <Button variant='primary' type="submit">Add</Button>
                     </Form>
                 </Container>
     )
