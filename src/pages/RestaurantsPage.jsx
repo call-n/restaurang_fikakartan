@@ -2,6 +2,8 @@ import { Container, Row, Col, Button } from "react-bootstrap"
 import { useMemo } from 'react'
 import  useGetRestaurants  from '../hooks/useGetRestaurants'
 import SortableTable from "../components/SortableTable"
+import { Link } from "react-router-dom"
+
 
 const RestaurantsPage = () => {
     const { data: restaurants, error, isError, isLoading } = useGetRestaurants('restaurants')
@@ -13,26 +15,73 @@ const RestaurantsPage = () => {
                 accessor: 'name'
             },
             {
+                Header: 'Address',
+                accessor: 'address'
+            },
+            {
                 Header: 'City',
                 accessor: 'city'
             },
             {
-                Header: 'Address',
-                accessor: 'address'
+                Header: 'Description',
+                accessor: 'description'
             },
+            // {
+            //     Header: 'Type of restaurant',
+            //     accessor: 'type'
+            // },
+            // {
+            //     Header: 'Restaurants selection',
+            //     accessor: 'selection'
+            // },
+            // {
+            //     Header: 'Phone',
+            //     accessor: 'phone'
+            // },
+            // {
+            //     Header: 'Email',
+            //     accessor: 'email'
+            // },
+            // {
+            //     Header: 'Website',
+            //     accessor: 'website'
+            // },
+            // {
+            //     Header: 'Facebook',
+            //     accessor: 'facebook'
+            // },
+            // {
+            //     Header: 'Instagram',
+            //     accessor: 'instagram'
+            // },
+            {
+                Header: 'More Info',
+                Cell: ({row: {original: restaurant}}) =>
+                <Button 
+                    variant='primary'
+                    size='sm'
+                    as={Link} to={`/restaurant/${restaurant.id}`}
+                    >
+                    More
+                </Button>
+            }
         ]
     }, [])
 
     return(
         <>
-        <Container>
+        
+        <Container className="my-3">
+            <Container>
             <h1>All resaurants</h1>
 
-            {isLoading && (<p>Loading...</p>)}
+{isLoading && (<p>Loading...</p>)}
 
-            {isError && (<p>{error.message}</p>)}
+{isError && (<p>{error.message}</p>)}
 
-            {restaurants && <SortableTable columns={columns} data={restaurants}/>}
+{restaurants && <SortableTable columns={columns} data={restaurants}/>}
+            </Container>
+
         </Container>
         </>
     )
