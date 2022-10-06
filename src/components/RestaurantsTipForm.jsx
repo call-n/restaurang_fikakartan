@@ -6,7 +6,9 @@ import { useForm } from 'react-hook-form'
 const TipForm = () => {
     const {register, handleSubmit, formState: { errors }, reset } = useForm()
 
+    // creates collection 'tips'
     const onCreateTip = async (data) => {
+        // add document to collection 'tips'
         await addDoc(collection(db, 'tips'), {
             completed: false,
             created: serverTimestamp(),

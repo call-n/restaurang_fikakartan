@@ -10,7 +10,9 @@ import GoogleApi from '../services/GoogleApi'
 const CreateRestaurantForm = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
 
+    // Create 'restaurants' collection
     const onCreateRestaurant = async (data) => {
+        // add document to collection 'restaurants'
         await addDoc(collection(db, 'restaurants'), {
             name: data.name,
             address: data.address,
@@ -25,6 +27,7 @@ const CreateRestaurantForm = () => {
             instagram: data.instagram,
             coordinates: await GoogleApi.LatLong(data.address + data.city),
         })
+        // reset the form
         reset() 
         console.log(data);
     }
@@ -36,6 +39,7 @@ const CreateRestaurantForm = () => {
 
                         <Form.Group as={Col} controlId='name' className='mb-2'>
                             <Form.Label>Name</Form.Label>
+                            {/* spread register and save the data under 'name' */}
                             <Form.Control {...register("name", {
                                 required: "Please enter a name",
                                 minLength : {
