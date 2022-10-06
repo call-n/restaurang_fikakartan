@@ -1,4 +1,5 @@
 import React from 'react'
+import Map from '../components/Map'
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
 
@@ -8,7 +9,7 @@ function HomePage() {
 
   return (
     <div>
-      <h1>HomePage</h1>
+      <Map />
       {user && (
           <li>
             {!isPending && <button className="btn" onClick={logout}>Logout</button>}

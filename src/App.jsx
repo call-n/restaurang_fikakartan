@@ -1,3 +1,4 @@
+import './assets/App.scss'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext'
 import Navigation from './components/Navigation'
@@ -27,6 +28,8 @@ function App() {
           <Route path='restaurant/:id' element={<RestaurantPage/>}/>
           <Route path='/restaurants' element={<RestaurantsPage/>}/>
           <Route path='/tips' element={<TipsPage/>} />
+          <Route path="*" element={<NotFound />} />
+          
         </Routes>
       )}
       </div>
