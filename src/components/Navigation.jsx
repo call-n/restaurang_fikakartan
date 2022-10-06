@@ -28,6 +28,7 @@ const Navigation = () => {
 
 									<NavDropdown title='Press'>
 										<NavLink to='/admin' className='dropdown-item'>User List</NavLink>
+										<NavLink to='/create-restaurant' className='dropdown-item'>Create Restaurant</NavLink>
 										<NavLink to='/restaurants' className='dropdown-item'>Restaurants</NavLink>
 										<NavLink to='/tips' className='dropdown-item'>Pending Tips</NavLink>
 										<NavDropdown.Divider />
