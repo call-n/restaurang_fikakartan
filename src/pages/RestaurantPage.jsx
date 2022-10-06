@@ -1,9 +1,8 @@
-import { Container, Row, Col, Button, ListGroup, ListGroupItem } from "react-bootstrap"
+import { Container, Button, ListGroup, ListGroupItem } from "react-bootstrap"
 import { Link, useParams } from 'react-router-dom'
-// import { useAuthContext } from "../contexts/AuthContext"
 import useGetRestaurant from "../hooks/useGetRestaurant"
 
-const RestaurantsPage = () => {
+const RestaurantPage = () => {
     const {id} = useParams()
     const {data: restaurant, error, isError, isLoading} = useGetRestaurant(id)
 
@@ -39,4 +38,4 @@ const RestaurantsPage = () => {
     )
 }
 
-export default RestaurantsPage
+export default RestaurantPage
