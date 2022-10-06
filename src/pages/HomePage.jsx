@@ -1,8 +1,22 @@
 import React from 'react'
 import Map from '../components/Map'
-const HomePage = () => {
+import { useLogout } from '../hooks/useLogout'
+import { useAuthContext } from '../hooks/useAuthContext'
+
+function HomePage() {
+  const { logout, isPending } = useLogout()
+  const { user } = useAuthContext()
+
   return (
-        <Map />
+    <div>
+      <Map />
+      {user && (
+          <li>
+            {!isPending && <button className="btn" onClick={logout}>Logout</button>}
+            {isPending && <button className="btn" disabled>Logging out...</button>}
+          </li>
+        )}
+    </div>
   )
 }
 
