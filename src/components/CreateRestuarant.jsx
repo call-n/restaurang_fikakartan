@@ -12,7 +12,7 @@ const CreateRestaurantForm = () => {
 
     // Create 'restaurants' collection
     const onCreateRestaurant = async (data) => {
-        // add document to collection 'restaurants'
+        // add document to collection 'restaurants
         await addDoc(collection(db, 'restaurants'), {
             name: data.name,
             address: data.address,
