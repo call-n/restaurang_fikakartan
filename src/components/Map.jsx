@@ -25,7 +25,7 @@ const Map = () => {
     const {data: restaurants} = useStreamCollection("restaurants")
 
     // load map api
-    const { isLoaded } = useJsApiLoader({mapsAPIKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,libraries})
+    const { isLoaded } = useJsApiLoader({googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,libraries})
 
     // states
     const [pos, setPos] = useState({lat: 56.3768708, lng: 13.9306438})
