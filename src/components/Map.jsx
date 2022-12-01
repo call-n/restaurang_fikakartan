@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from 'react-query'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import mapAPI from '../services/MapAPI'
 import Button from 'react-bootstrap/Button'
 import Search from './Search'
@@ -9,6 +9,8 @@ import useStreamCollection from '../hooks/useStreamCollection'
 import NearbyRestaurantList from './NearbyRestaurantList'
 import Directions from './Directions'
 import {Link} from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+
 
 
 const libraries = ['places']
@@ -35,6 +37,9 @@ const Map = () => {
     const [selectedRestaurant, setSelectedRestaurant] = useState(null)
 
 
+    const [searchParams, setSeachParams] = useSearchParams()
+
+
     // Get users location
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -58,6 +63,13 @@ const Map = () => {
     const toggleList = () => {
         setShowList(!showList)
     }
+
+    useEffect(() => {
+        if(searchParams.get('city') ) { 
+            handleSubmit(searchParams.get('city'))
+        }
+    }, [searchParams]) 
+    console.log(searchParams.get('city'))
 
   return (
     <>

@@ -5,11 +5,15 @@ import Nav from 'react-bootstrap/Nav'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuthContext } from '../hooks/useAuthContext'
 import { NavDropdown } from 'react-bootstrap'
+import useGetUsers from "../hooks/useGetUsers"
 import { useLogout } from '../hooks/useLogout'
 
 const Navigation = () => {
 	const { user } = useAuthContext()
 	const { logout, isPending } = useLogout()
+    const {data: users, error, isError, isLoading} = useGetUsers('users')
+
+	const admin = user === null ? [] : users.filter(u => u.displayName === user.displayName)
 
 	return (
 		<Navbar bg="dark" variant="dark" expand="md">
@@ -36,11 +40,14 @@ const Navigation = () => {
 												roundedCircle
 											  />
 											: user.name || user.email
-									}>
+									}> {admin[0]?.admin && (
+										<>
 										<NavLink to='/admin' className='dropdown-item'>User List</NavLink>
 										<NavLink to='/create-restaurant' className='dropdown-item'>Create Restaurant</NavLink>
-										<NavLink to='/restaurants' className='dropdown-item'>Restaurants</NavLink>
 										<NavLink to='/tips' className='dropdown-item'>Pending Tips</NavLink>
+										</>
+									)}
+										<NavLink to='/restaurants' className='dropdown-item'>Restaurants</NavLink>
 										<NavDropdown.Divider />
 										{user && (
 											<li>
