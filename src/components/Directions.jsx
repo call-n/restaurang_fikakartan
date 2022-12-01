@@ -30,7 +30,9 @@ const Directions = ({restaurant}) => {
             )}        
 
             {pos && (
-                <Button href={`https://www.google.com/maps/dir/${pos.lat},${pos.lng}/${restaurant.name},+${restaurant.street}+${restaurant.city}`}>Go Now!</Button>
+                <Button href={`https://www.google.com/maps/dir/${pos.lat},${pos.lng}/${restaurant.name},+${restaurant.street}+${restaurant.city}`} target="_blank" rel="noopener nofollow">
+                    Go Now!
+                </Button>
             )}
         </>
     )

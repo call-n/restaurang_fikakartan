@@ -14,10 +14,23 @@ import RegisterPage from './pages/RegisterPage'
 import PageNotFound from './pages/PageNotFound'
 import CreateTipPage from './pages/CreateTipPage'
 import AdminPage from './pages/AdminPage'
+import useGetUsers from "./hooks/useGetUsers"
+
 
 function App() {
   const { authIsReady, user } = useAuthContext()
 
+  const {data: users, error, isError, isLoading} = useGetUsers('users')
+
+  // const admin = null
+
+  // if (user){
+	//   admin =  users.filter(u => u.displayName === user.displayName)
+  // } 
+
+  const admin = user === null ? [] : users.filter(u => u.displayName === user.displayName)
+
+console.log(admin);
   return (
     <div id='App'>
       {authIsReady && (
@@ -30,15 +43,15 @@ function App() {
             <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
             <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
             <Route path="*" element={<PageNotFound />} />
+            <Route path='restaurant/:id' element={  <RestaurantPage />}/>
+            <Route path='/restaurants' element={  <RestaurantsPage />}/>
 
             {/* Protected routes */}
-            <Route path='update-restaurant/:id' element={!user ? <Navigate to="/login" /> : <UpdateRestaurantPage />}/>
-            <Route path='/create-restaurant' element={!user ? <Navigate to="/login" /> : <CreateRestaurantPage />}/>
-            <Route path='restaurant/:id' element={!user ? <Navigate to="/login" /> : <RestaurantPage />}/>
-            <Route path='/restaurants' element={!user ? <Navigate to="/login" /> : <RestaurantsPage />}/>
-            <Route path='/tips' element={!user ? <Navigate to="/login" /> : <TipsPage />} />
-            <Route path='/tip/:id' element={!user ? <Navigate to="/login" /> : <TipPage />} />
-            <Route path='/admin' element={!user ? <Navigate to="/login" /> : <AdminPage />} />
+            <Route path='update-restaurant/:id' element={!admin[0]?.admin ? <Navigate to="/login" /> : <UpdateRestaurantPage />}/>
+            <Route path='/create-restaurant' element={!admin[0]?.admin ? <Navigate to="/login" /> : <CreateRestaurantPage />}/>
+            <Route path='/tips' element={!admin[0]?.admin ? <Navigate to="/login" /> : <TipsPage />} />
+            <Route path='/tip/:id' element={!admin[0]?.admin ? <Navigate to="/login" /> : <TipPage />} />
+            <Route path='/admin' element={!admin[0]?.admin ? <Navigate to="/login" /> : <AdminPage />} />
 
           </Routes>
         </>
