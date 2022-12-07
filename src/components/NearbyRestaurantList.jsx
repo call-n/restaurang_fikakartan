@@ -56,7 +56,7 @@ const NearbyRestaurantList = ({ city }) => {
               <ul>
                 <h2>All restaurants</h2>
                 {data.map((r) => (
-                  <li>
+                  <li key={r.id}>
                     <RestaurantListCard restaurant={r} />
                   </li>
                 ))}
@@ -69,7 +69,7 @@ const NearbyRestaurantList = ({ city }) => {
                 {data
                   .filter((r) => r.type === typeFilter)
                   .map((r) => (
-                    <li>
+                    <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
                     </li>
                   ))}
@@ -82,7 +82,7 @@ const NearbyRestaurantList = ({ city }) => {
                 {data
                   .filter((r) => r.selection === selectionFilter)
                   .map((r) => (
-                    <li>
+                    <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
                     </li>
                   ))}
@@ -100,7 +100,7 @@ const NearbyRestaurantList = ({ city }) => {
                       r.type === typeFilter && r.selection === selectionFilter
                   )
                   .map((r) => (
-                    <li>
+                    <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
                     </li>
                   ))}
@@ -115,7 +115,7 @@ const NearbyRestaurantList = ({ city }) => {
               <ul>
                 <h2>All restaurants in {city}</h2>
                 {restaurants.map((r) => (
-                  <li>
+                  <li key={r.id}>
                     <RestaurantListCard restaurant={r} />
                   </li>
                 ))}
@@ -128,7 +128,7 @@ const NearbyRestaurantList = ({ city }) => {
                 {restaurants
                   .filter((r) => r.type === typeFilter)
                   .map((r) => (
-                    <li>
+                    <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
                     </li>
                   ))}
@@ -141,7 +141,7 @@ const NearbyRestaurantList = ({ city }) => {
                 {restaurants
                   .filter((r) => r.selection === selectionFilter)
                   .map((r) => (
-                    <li>
+                    <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
                     </li>
                   ))}
@@ -159,7 +159,7 @@ const NearbyRestaurantList = ({ city }) => {
                       r.type === typeFilter && r.selection === selectionFilter
                   )
                   .map((r) => (
-                    <li>
+                    <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
                     </li>
                   ))}
