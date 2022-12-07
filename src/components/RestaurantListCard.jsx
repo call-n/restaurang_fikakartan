@@ -7,8 +7,11 @@ const RestaurantListCard = ({restaurant}) => {
   return (
     <div className="">
         <h3>{restaurant.name}</h3>
-        <p>{restaurant.address}</p>
-        <p>{restaurant.city}</p>
+        <p>Address: {restaurant.address}</p>
+        <p>Location:  {restaurant.city}</p>
+        <p>Type: {restaurant.type}</p>
+        <p>Offers: {restaurant.selection}</p>
+        <p>Contact: {restaurant.email} | {restaurant.phone}</p>
         <Directions restaurant={restaurant}/>
     </div>
   )

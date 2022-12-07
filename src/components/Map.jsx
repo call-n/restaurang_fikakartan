@@ -17,8 +17,8 @@ const libraries = ['places']
 
 
 const mapContainer = {
-    widht: '100vw',
-    height: '100vh',
+  widht: "100vw",
+  height: "100vh",
 }
 
 const Map = () => {
@@ -73,66 +73,96 @@ const Map = () => {
 
   return (
     <>
-        {!isLoaded && (
-            <p>Loading map...</p>
-        )}
+      {!isLoaded && <p>Loading map...</p>}
 
-        {isLoaded && (
-            <>
-                <div className="d-flex m-3">
-                    <div className="d-flex flex-row">
-                        <Search onSubmit={handleSubmit} />
-                        <Button className='m-1' onClick={getCurrentLocation} variant="dark">Find Me</Button>
-                        <Button className='m-1'  variant="dark" onClick={toggleList}>Show List</Button>    
-                        <Button className='m-1' variant='dark' as={Link} to='/create-tip'>Suggest Restaurant</Button>
-                    </div>
+      {isLoaded && (
+        <>
+          <div className="d-flex m-3">
+            <div className="d-flex flex-row">
+              <Search onSubmit={handleSubmit} />
+              <Button
+                className="m-1"
+                onClick={getCurrentLocation}
+                variant="dark"
+              >
+                Find Me
+              </Button>
+              <Button className="m-1" variant="dark" onClick={toggleList}>
+                Show List
+              </Button>
+              <Button className="m-1" variant="dark" as={Link} to="/create-tip">
+                Suggest Restaurant
+              </Button>
+            </div>
+          </div>
+          <Modal show={showList} onHide={toggleList} closeButton>
+            {<NearbyRestaurantList  city={city}/>}
+          </Modal>
 
+          <GoogleMap
+            center={pos}
+            mapContainerStyle={mapContainer}
+            zoom={12}
+            className="map"
+          >
+            {userPos && <Marker position={userPos} label="Me" />}
+
+            {!city &&
+              restaurants.map((restaurant) => (
+                <Marker
+                  onClick={() => {
+                    setSelectedRestaurant(restaurant)
+                  }}
+                  key={restaurant.id}
+                  position={{
+                    lat: restaurant.coordinates.lat,
+                    lng: restaurant.coordinates.lng,
+                  }}
+                />
+              ))}
+
+            {/**If we have city then filter the restaurants to show onyl those in city */}
+            {city &&
+              restaurants
+                .filter((restaurant) => restaurant.city == city)
+                .map((fRestaurant) => (
+                  <Marker
+                    onClick={() => {
+                      setSelectedRestaurant(fRestaurant)
+                    }}
+                    key={fRestaurant.id}
+                    position={{
+                      lat: fRestaurant.coordinates.lat,
+                      lng: fRestaurant.coordinates.lng,
+                    }}
+                  />
+                ))}
+
+            {/**Show info window for clicked marker/restaurant on map */}
+            {selectedRestaurant && (
+              <InfoWindow
+                onCloseClick={() => {
+                  setSelectedRestaurant(null)
+                }}
+                position={{
+                  lat: selectedRestaurant.coordinates.lat,
+                  lng: selectedRestaurant.coordinates.lng,
+                }}
+              >
+                <div>
+                  <h2>{selectedRestaurant.name}</h2>
+                  <p>Address: {selectedRestaurant.address}</p>
+                  <p>Location: {selectedRestaurant.city}</p>
+                  <p>Type: {selectedRestaurant.type}</p>
+                  <p>Offers: {selectedRestaurant.selection}</p>
+                  <Directions restaurant={selectedRestaurant} />
                 </div>
-                {showList &&(
-                    <NearbyRestaurantList city={city}/>
-                )}
-
-                <GoogleMap
-                    center={pos}
-                    mapContainerStyle={mapContainer}
-                    zoom={12}
-                    className="map"
-                >
-                    
-                    {userPos && (
-                        <Marker position={userPos} label="Me"/>
-                    )}
-
-                    
-                    {!city && (
-                        restaurants.map((restaurant) => (
-                            <Marker onClick={ () =>{setSelectedRestaurant(restaurant)}} key={restaurant.id} position={{lat:restaurant.coordinates.lat, lng:restaurant.coordinates.lng}}/>
-                        ))
-                    )}
-
-                    {/**If we have city then filter the restaurants to show onyl those in city */}
-                    {city && (
-                        restaurants.filter((restaurant) => restaurant.city == city).map((fRestaurant) => (
-                            <Marker onClick={ () => {setSelectedRestaurant(fRestaurant)}} key={fRestaurant.id} position={{lat:fRestaurant.coordinates.lat, lng:fRestaurant.coordinates.lng}} />
-                        ))
-                    )}
-
-                    {/**Show info window for clicked marker/restaurant on map */}
-                    {selectedRestaurant && (
-                        <InfoWindow onCloseClick={() => {setSelectedRestaurant(null)}} position={{lat: selectedRestaurant.coordinates.lat, lng: selectedRestaurant.coordinates.lng}}>
-                            <div>
-                                <h2>{selectedRestaurant.name}</h2>
-                                <p>{selectedRestaurant.city}</p>
-                                <p>{selectedRestaurant.address}</p>
-                                <p>{selectedRestaurant.selection}</p>
-                                <Directions restaurant={selectedRestaurant} />
-                            </div>
-                        </InfoWindow>
-                    )}
-                </GoogleMap>
-            </>
-         )}
-    </> 
+              </InfoWindow>
+            )}
+          </GoogleMap>
+        </>
+      )}
+    </>
   )
 }
 
