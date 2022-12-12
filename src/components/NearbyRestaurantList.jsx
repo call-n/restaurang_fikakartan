@@ -11,7 +11,6 @@ const NearbyRestaurantList = ({ city }) => {
   const [typeFilter, setTypeFilter] = useState("")
   const [selectionFilter, setSelectionFilter] = useState("")
 
-  console.log(data)
 
   return (
     <>

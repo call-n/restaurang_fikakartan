@@ -7,7 +7,6 @@ const getLatLong = async (address) => {
 
     const cords = res.data.results[0].geometry.location
 
-    console.log(cords)
     return cords
 }
 

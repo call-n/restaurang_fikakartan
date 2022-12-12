@@ -1,6 +1,5 @@
 import './assets/App.scss'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { useAuthContext } from './hooks/useAuthContext'
 import Navigation from './components/Navigation'
 import CreateRestaurantPage from './pages/CreateRestaurantPage'
 import RestaurantsPage from './pages/RestaurantsPage'
@@ -14,48 +13,35 @@ import RegisterPage from './pages/RegisterPage'
 import PageNotFound from './pages/PageNotFound'
 import CreateTipPage from './pages/CreateTipPage'
 import AdminPage from './pages/AdminPage'
-import useGetUsers from "./hooks/useGetUsers"
+import { useAuthContext } from "./contexts/AuthContext";
+import UpdateProfila from './pages/UpdateProfila'
 
 
 function App() {
-  const { authIsReady, user } = useAuthContext()
-
-  const {data: users, error, isError, isLoading} = useGetUsers('users')
-
-  // const admin = null
-
-  // if (user){
-	//   admin =  users.filter(u => u.displayName === user.displayName)
-  // } 
-
-  const admin = user === null ? [] : users.filter(u => u.displayName === user.displayName)
-
-console.log(admin);
+  const { currentUser, isAdmin } = useAuthContext();
+  
   return (
     <div id='App'>
-      {authIsReady && (
-        <>
           <Navigation/>
           <Routes>
             {/* Public Routes */}
             <Route path='/' element={<HomePage/>}/>
             <Route path='/create-tip' element={<CreateTipPage/>}/>
-            <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
-            <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
+            <Route path="/register" element={currentUser ? <Navigate to="/" /> : <RegisterPage />} />
+            <Route path="/login" element={currentUser ? <Navigate to="/" /> : <LoginPage />} />
             <Route path="*" element={<PageNotFound />} />
             <Route path='restaurant/:id' element={  <RestaurantPage />}/>
             <Route path='/restaurants' element={  <RestaurantsPage />}/>
+            <Route path='/updateProfila' element={!currentUser ? <Navigate to="/" /> : <UpdateProfila />}/>
 
             {/* Protected routes */}
-            <Route path='update-restaurant/:id' element={!admin[0]?.admin ? <Navigate to="/login" /> : <UpdateRestaurantPage />}/>
-            <Route path='/create-restaurant' element={!admin[0]?.admin ? <Navigate to="/login" /> : <CreateRestaurantPage />}/>
-            <Route path='/tips' element={!admin[0]?.admin ? <Navigate to="/login" /> : <TipsPage />} />
-            <Route path='/tip/:id' element={!admin[0]?.admin ? <Navigate to="/login" /> : <TipPage />} />
-            <Route path='/admin' element={!admin[0]?.admin ? <Navigate to="/login" /> : <AdminPage />} />
+            <Route path='update-restaurant/:id' element={!isAdmin ? <Navigate to="/login" /> : <UpdateRestaurantPage />}/>
+            <Route path='/create-restaurant' element={!isAdmin ? <Navigate to="/login" /> : <CreateRestaurantPage />}/>
+            <Route path='/tips' element={!isAdmin? <Navigate to="/login" /> : <TipsPage />} />
+            <Route path='/tip/:id' element={!isAdmin? <Navigate to="/login" /> : <TipPage />} />
+            <Route path='/admin' element={!isAdmin? <Navigate to="/login" /> : <AdminPage />} />
 
           </Routes>
-        </>
-      )}
       </div>
   )
 }

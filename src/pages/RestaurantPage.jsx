@@ -1,26 +1,19 @@
 import { Container, Button, ListGroup, ListGroupItem } from "react-bootstrap"
 import { Link, useParams } from 'react-router-dom'
 import useGetRestaurant from "../hooks/useGetRestaurant"
-import useGetUsers from "../hooks/useGetUsers"
-import { useAuthContext } from '../hooks/useAuthContext'
-
-
-
+import { useAuthContext } from "../contexts/AuthContext";
 
 const RestaurantPage = () => {
-	const { user } = useAuthContext()
+    const { isAdmin } = useAuthContext();
     const {id} = useParams()
     const {data: restaurant, error, isError, isLoading} = useGetRestaurant(id)
-    const {data: users} = useGetUsers('users')
-	const admin = users.filter(u => u.displayName === user.displayName)
-    
 
     return(
         <>
             <Container>
                 <div className="d-flex m-3">
                     <h1>{restaurant.name}</h1> 
-                    {admin[0]?.admin && (
+                    {isAdmin && (
                                             <Button 
                                             className="ms-3"
                                             as={Link} to={`/update-restaurant/${restaurant.id}`}

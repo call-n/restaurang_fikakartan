@@ -1,43 +1,71 @@
-import { useState } from 'react'
-import { useLogin } from '../hooks/useLogin'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/AuthContext";
+import {Form, Card} from 'react-bootstrap'
 
-function LoginPage() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const { login, error, isPending } = useLogin()
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        login(email, password)
-    }
+const Login = () => {
+	const emailRef = useRef();
+	const passwordRef = useRef();
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const { login } = useAuthContext();
+	const navigate = useNavigate();
 
-    return (
-        <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control 
-                    type="email" 
-                    placeholder="Enter email" 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    value={email} 
-                />
-            </Form.Group>
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setError(null);
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control 
-                    type="password" 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    value={password}  
-                />
-            </Form.Group>
-            {!isPending && <Button variant="primary" type="submit">Log in</Button>}
-            {isPending && <Button variant="primary" type="submit" disabled>loading</Button>}
-            {error && <div className="error">{error}</div>}
-        </Form>
-    )
-}
+		try {
+			setLoading(true);
+			await login(emailRef.current.value, passwordRef.current.value);
+			navigate("/");
+		} catch (err) {
+			setError(err.message);
+			setLoading(false);
+		}
+	};
 
-export default LoginPage
+	return (
+        <Card>
+			{loading && (
+				<div>
+					lodaing...
+				</div>
+			)}
+
+
+            
+            <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control 
+                        type="email" 
+                        placeholder="Enter email" 
+                        ref={emailRef}
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control 
+                        type="password" 
+                        ref={passwordRef}
+                    />
+                </Form.Group>
+
+                {error && (
+                    <div>
+                        <span>{error}</span>
+                    </div>
+                )}
+
+                <button>
+                    Sign in
+                </button>
+            </Form>
+        </Card>
+	);
+};
+
+export default Login;

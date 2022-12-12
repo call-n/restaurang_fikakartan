@@ -1,45 +1,67 @@
-import React, { useRef, useState } from 'react'
-import { Form, Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import { useRegister } from '../hooks/useRegister'
+import { useRef, useState } from "react";
+import { useAuthContext } from "../contexts/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { Card, Form } from "react-bootstrap";
 
-function RegisterPage() {
-	const emailRef = useRef()
-	const displayNameRef = useRef()
-	const passwordRef = useRef()
-	const [photo, setPhoto] = useState(false)
-    const [imageError, setImageError] = useState(null)
-    const { register, error, isPending } = useRegister()
+
+const Signup = () => {
+	const displayNameRef = useRef();
+	const emailRef = useRef();
+	const passwordRef = useRef();
+	const passwordConfirmRef = useRef();
+	const [image, setImage] = useState(false);
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const { signup } = useAuthContext();
+	const navigate = useNavigate();
 
 	const handleFileChange = (e) => {
-        let selected = e.target.files[0]
-
-        if (!e.target.files.length) {
-			setPhoto(null)
-			return
+		if (!e.target.files[0]) {
+			setImage(null);
+			return;
 		}
-        if (!selected.type.includes('image')) {
-            setImageError('Selected file must be an image')
-            return
-        }
-        if (selected.size > 150000) {
-            setImageError('Image file size must be less than 100kb')
-            return
-        }
 
-		setPhoto(e.target.files[0])
-		console.log("File changed!", e.target.files[0])
-    }
+		setImage(e.target.files[0]);
+		console.log("File changed!", e.target.files[0]);
+	};
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        register(emailRef.current.value, passwordRef.current.value, displayNameRef.current.value, photo)
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
+		//checks for matching passwords
+		if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+			return setError("The passwords does not match");
+		}
 
-    }
+		setError(null);
+		try {
+			setLoading(true);
+			await signup(
+				emailRef.current.value,
+				passwordRef.current.value,
+				displayNameRef.current.value,
+				image
+			);
+
+			navigate("/");
+
+			setLoading(false);
+		} catch (err) {
+			setError(err.message);
+			setLoading(false);
+			console.log(err);
+		}
+	};
 
 	return (
-		<div>
+        <div>
+			{loading && (
+				<div>
+					Loading...
+				</div>
+			)}
+
+        
             <Card>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
@@ -57,18 +79,27 @@ function RegisterPage() {
                         <Form.Group id="photo" className="mb-3">
                             <Form.Label>Photo</Form.Label>
                             <Form.Control type="file" onChange={handleFileChange} />
-                            <Form.Text>
-                                {imageError}
-                            </Form.Text>
                         </Form.Group>
 
                         <Form.Group id="password" className="mb-3">
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" ref={passwordRef} required />
                         </Form.Group>
-                        {!isPending && <button className="btn">Sign up</button>}
-                        {isPending && <button className="btn" disabled>loading</button>}
-                        {error && <div className="error">{error}</div>}
+
+                        <Form.Group id="password" className="mb-3">
+                            <Form.Label>Confirm password</Form.Label>
+                            <Form.Control type="password" ref={passwordConfirmRef} required />
+                        </Form.Group>
+
+                        {error && (
+                            <div>
+                                <span>{error}</span>
+                            </div>
+			    	    )}
+
+                        <button>
+                            Create Account
+						</button>
                     </Form>
                 </Card.Body>
             </Card>
@@ -77,7 +108,7 @@ function RegisterPage() {
                 <Link to="/login">Log in instead?</Link>
             </div>
         </div>
-	)
-}
+	);
+};
 
-export default RegisterPage
+export default Signup;
