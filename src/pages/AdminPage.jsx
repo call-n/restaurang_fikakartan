@@ -10,17 +10,17 @@ const AdminPage = () => {
         return[
             {
                 Header: 'ProfilePic',
-                accessor: 'imageURL',
+                accessor: 'photoURL',
                 Cell: tableProps => (
                     <img 
-                        src={tableProps.row.original.imageURL}
+                        src={tableProps.row.original.photoURL}
                         width={60}
                     />
                 )
             },
             {
                 Header: 'name',
-                accessor:'name',
+                accessor:'displayName',
             },
             {
                 Header: 'Email',
