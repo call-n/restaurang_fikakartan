@@ -23,7 +23,6 @@ const UpdateRestaurantForm = ({restaurant}) => {
         })
         reset()
     }
-    console.log(restaurant)
     return( 
         <Card>
             <Card.Body>

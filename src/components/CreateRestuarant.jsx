@@ -29,7 +29,6 @@ const CreateRestaurantForm = () => {
         })
         // reset the form
         reset() 
-        console.log(data);
     }
 
     return (

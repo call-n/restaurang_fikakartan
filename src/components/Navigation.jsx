@@ -3,17 +3,14 @@ import Image from 'react-bootstrap/Image'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import { Link, NavLink } from 'react-router-dom'
-import { useAuthContext } from '../hooks/useAuthContext'
 import { NavDropdown } from 'react-bootstrap'
-import useGetUsers from "../hooks/useGetUsers"
-import { useLogout } from '../hooks/useLogout'
+import { useAuthContext } from "../contexts/AuthContext";
+
+
 
 const Navigation = () => {
-	const { user } = useAuthContext()
-	const { logout, isPending } = useLogout()
-    const {data: users, error, isError, isLoading} = useGetUsers('users')
 
-	const admin = user === null ? [] : users.filter(u => u.displayName === user.displayName)
+	const { currentUser, isAdmin, logout } = useAuthContext();
 
 	return (
 		<Navbar bg="dark" variant="dark" expand="md">
@@ -26,21 +23,21 @@ const Navigation = () => {
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto align-items-center">
 						{
-							user ? (
+							currentUser? (
 								<>
 									{/* User is logged in */}
 
 									<NavDropdown title={
-										user.photoURL
+										currentUser?.photoURL
 											? <Image
-												src={user.photoURL}
+												src={currentUser?.photoURL}
 												height={30}
 												width={40}
 												fluid
 												roundedCircle
 											  />
-											: user.name || user.email
-									}> {admin[0]?.admin && (
+											: currentUser?.name || currentUser?.email
+									}> {isAdmin && (
 										<>
 										<NavLink to='/admin' className='dropdown-item'>User List</NavLink>
 										<NavLink to='/create-restaurant' className='dropdown-item'>Create Restaurant</NavLink>
@@ -48,11 +45,14 @@ const Navigation = () => {
 										</>
 									)}
 										<NavLink to='/restaurants' className='dropdown-item'>Restaurants</NavLink>
+										
+										{currentUser && (
+											<NavLink to='/updateProfila' className='dropdown-item'>Update Profila</NavLink>
+										)}
 										<NavDropdown.Divider />
-										{user && (
+										{currentUser && (
 											<li>
-												{!isPending && <button className="btn" onClick={logout}>Logout</button>}
-												{isPending && <button className="btn" disabled>Logging out...</button>}
+												<button className="btn" onClick={() => logout()}>Logout</button>
 											</li>
 											)}
 									</NavDropdown>

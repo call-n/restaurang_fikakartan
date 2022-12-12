@@ -70,7 +70,6 @@ const Map = () => {
             handleSubmit(searchParams.get('city'))
         }
     }, [searchParams]) 
-    console.log(searchParams.get('city'))
 
   return (
     <>
