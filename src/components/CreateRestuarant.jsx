@@ -6,27 +6,42 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import GoogleApi from '../services/GoogleApi'
+import { useState } from 'react'
+
+
+
+
 
 const CreateRestaurantForm = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
+    const [error ,setError] = useState(false)
+    const [success ,setSuccess] = useState(false)
 
     // Create 'restaurants' collection
     const onCreateRestaurant = async (data) => {
         // add document to collection 'restaurants
-        await addDoc(collection(db, 'restaurants'), {
-            name: data.name,
-            address: data.address,
-            city: data.city,
-            description: data.description,
-            type: data.type,
-            selection: data.selection,
-            email: data.email,
-            phone: data.phone,
-            website: data.website,
-            facebook: data.facebook,
-            instagram: data.instagram,
-            coordinates: await GoogleApi.LatLong(data.address + data.city),
-        })
+        if(await GoogleApi.LatLong(`${data.address}, ${data.city}`)){
+            await addDoc(collection(db, 'restaurants'), {
+                name: data.name,
+                address: data.address,
+                city: data.city,
+                description: data.description,
+                type: data.type,
+                selection: data.selection,
+                email: data.email,
+                phone: data.phone,
+                website: data.website,
+                facebook: data.facebook,
+                instagram: data.instagram,
+                coordinates: await GoogleApi.LatLong(data.address + data.city),
+            })
+
+            setSuccess(true)
+        }
+
+        else{
+            setError(true)
+        }
         // reset the form
         reset() 
     }
@@ -58,7 +73,7 @@ const CreateRestaurantForm = () => {
                                     message: 'The address needs to be 3 characters long',
                                 }, 
                             })} type='text' />
-                            {errors.address && <span>{errors.address.message}</span>}
+                            {error && <span>Invalid Adress or City</span>}
                         </Form.Group>
 
                         <Form.Group className='mb-2' controlId='city'>
@@ -70,7 +85,7 @@ const CreateRestaurantForm = () => {
                                     message: 'The city needs to be 3 characters long',
                                 }, 
                             })} type='text' />
-                            {errors.city && <span>{errors.city.message}</span>}
+                             {error && <span>Invalid Adress or City</span>}
                         </Form.Group>
 
                         <Form.Group className='mb-2' controlId='description'>
@@ -139,6 +154,11 @@ const CreateRestaurantForm = () => {
                         </Form.Group>
 
                         <Button variant='primary' type="submit">Add</Button>
+                        {success && (
+                            <p>
+                                Restaurant created!
+                            </p>
+                        )}
                     </Form>
                 </Container>
     )

@@ -2,25 +2,38 @@ import {Col, Card, Form, Button } from 'react-bootstrap'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+import GoogleApi from '../services/GoogleApi'
 
 const UpdateRestaurantForm = ({restaurant}) => {
+    const [error ,setError] = useState(false)
+    const [success ,setSuccess] = useState(false)
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
 
     // Update document in 'restaurants' collection
     const onUpdateRestaurant = async (data) => {
-        await updateDoc(doc(db, 'restaurants', restaurant.id), {
-            name: data.name,
-            address: data.address,
-            city: data.city,
-            description: data.description,
-            type: data.type,
-            selection: data.selection,
-            email: data.email,
-            phone: data.phone,
-            website: data.website,
-            facebook: data.facebook,
-            instagram: data.instagram,
-        })
+        if(await GoogleApi.LatLong(`${data.address}, ${data.city}`)){
+            await updateDoc(doc(db, 'restaurants', restaurant.id), {
+                name: data.name,
+                address: data.address,
+                city: data.city,
+                description: data.description,
+                type: data.type,
+                selection: data.selection,
+                email: data.email,
+                phone: data.phone,
+                website: data.website,
+                facebook: data.facebook,
+                instagram: data.instagram,
+                coordinates: await GoogleApi.LatLong(data.address + data.city),
+            })
+
+            setSuccess(true)
+        }
+
+        else{
+            setError(true)
+        }
         reset()
     }
     return( 
@@ -55,6 +68,7 @@ const UpdateRestaurantForm = ({restaurant}) => {
                             type='text'
                             defaultValue={restaurant.address}
                          />
+                         {error && <span>Invalid Adress or City</span>}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='city' className='mb-2'>
@@ -68,6 +82,7 @@ const UpdateRestaurantForm = ({restaurant}) => {
                             type='text'
                             defaultValue={restaurant.city}
                          />
+                         {error && <span>Invalid Adress or City</span>}
                     </Form.Group>
 
                     <Form.Group as={Col} controlId='description' className='mb-2'>
@@ -153,6 +168,11 @@ const UpdateRestaurantForm = ({restaurant}) => {
                         </Form.Group>
 
                         <Button type='submit'>Update</Button>
+                        {success && (
+                            <p>
+                                Restaurant Updated!
+                            </p>
+                        )}
                 </Form>
             </Card.Body>
         </Card>
