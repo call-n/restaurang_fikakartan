@@ -11,6 +11,7 @@ import NearbyRestaurantList from './NearbyRestaurantList'
 import Directions from './Directions'
 import {Link} from 'react-router-dom'
 import { useSearchParams } from 'react-router-dom'
+import { Form } from 'react-bootstrap'
 
 
 
@@ -25,7 +26,7 @@ const mapContainer = {
 const Map = () => {
 
     // Get restaurants from db
-    const {data: restaurants} = useStreamCollection("restaurants")
+    const {data} = useStreamCollection("restaurants")
 
     // load map api
     const { isLoaded } = useJsApiLoader({googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,libraries})
@@ -36,9 +37,16 @@ const Map = () => {
     const [city, setCity] = useState(null)
     const [showList, setShowList] = useState(false)
     const [selectedRestaurant, setSelectedRestaurant] = useState(null)
+    const [type, setType] = useState("")
+    const [selection, setSelection] = useState("")
+  
 
 
     const [searchParams, setSeachParams] = useSearchParams()
+
+
+    // filter restaurant for searched city
+    const restaurants = data.filter((r) => r.city == city)
 
 
     // Get users location
@@ -77,7 +85,7 @@ const Map = () => {
 
       {isLoaded && (
         <>
-          <div className="d-flex m-3">
+          <div className='d-flex flex-column'>
             <div className="d-flex flex-row">
               <Search onSubmit={handleSubmit} />
               <Button
@@ -94,9 +102,45 @@ const Map = () => {
                 Suggest Restaurant
               </Button>
             </div>
+
+            <div>
+            <Form.Group className="m-3">
+              <Form.Label>Type</Form.Label>
+              <Form.Select
+                onChange={(e) => {
+                  setType(e.target.value)
+                }}
+                defaultValue="all"
+                className="w-25"
+              >
+                <option value="">All</option>
+                <option value="fastfood">Fast food</option>
+                <option value="foodtruck">Food truck</option>
+                <option value="cafe">Café</option>
+                <option value="pizzeria">Pizza</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="m-3">
+              <Form.Label>Selection</Form.Label>
+              <Form.Select
+                onChange={(e) => {
+                  setSelection(e.target.value)
+                }}
+                defaultValue="all"
+                className="w-25"
+              >
+                <option value="">All</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="afterwork">AW</option>
+                <option value="fika">Fika</option>
+              </Form.Select>
+            </Form.Group>
+            </div>
           </div>
           <Modal show={showList} onHide={toggleList} closeButton>
-            {<NearbyRestaurantList  city={city}/>}
+            {<NearbyRestaurantList city={city} type={type} selection={selection}/>}
           </Modal>
 
           <GoogleMap
@@ -106,9 +150,41 @@ const Map = () => {
             className="map"
           >
             {userPos && <Marker position={userPos} label="Me" />}
+          {!city && (
+            <>
+              {!type && !selection && (
+                    data.map((restaurant) => (
+                    <Marker
+                      onClick={() => {
+                        setSelectedRestaurant(restaurant)
+                      }}
+                      key={restaurant.id}
+                      position={{
+                        lat: restaurant.coordinates.lat,
+                        lng: restaurant.coordinates.lng,
+                      }}
+                    />
+                  ))
+              )}
 
-            {!city &&
-              restaurants.map((restaurant) => (
+              {type && !selection && (
+                data.filter((r) => r.type == type).map((restaurant) => (
+                  <Marker
+                    onClick={() => {
+                      setSelectedRestaurant(restaurant)
+                    }}
+                    key={restaurant.id}
+                    position={{
+                      lat: restaurant.coordinates.lat,
+                      lng: restaurant.coordinates.lng,
+                    }}
+                  />
+                ))
+              
+              )}
+
+              {selection && !type && (
+              data.filter((r) => r.selection == selection).map((restaurant) => (
                 <Marker
                   onClick={() => {
                     setSelectedRestaurant(restaurant)
@@ -119,24 +195,89 @@ const Map = () => {
                     lng: restaurant.coordinates.lng,
                   }}
                 />
-              ))}
+              ))
+              )}
 
-            {/**If we have city then filter the restaurants to show onyl those in city */}
-            {city &&
-              restaurants
-                .filter((restaurant) => restaurant.city == city)
-                .map((fRestaurant) => (
-                  <Marker
-                    onClick={() => {
-                      setSelectedRestaurant(fRestaurant)
-                    }}
-                    key={fRestaurant.id}
-                    position={{
-                      lat: fRestaurant.coordinates.lat,
-                      lng: fRestaurant.coordinates.lng,
-                    }}
-                  />
-                ))}
+              {selection && type && (
+               data.filter((r) => r.selection == selection && r.type == type).map((restaurant) => (
+                <Marker
+                  onClick={() => {
+                    setSelectedRestaurant(restaurant)
+                  }}
+                  key={restaurant.id}
+                  position={{
+                    lat: restaurant.coordinates.lat,
+                    lng: restaurant.coordinates.lng,
+                  }}
+                />
+              ))
+              )}
+            </>
+          )}
+
+        {city && (
+          <>
+            {!type && !selection && (
+             restaurants.map((restaurant) => (
+              <Marker
+                onClick={() => {
+                  setSelectedRestaurant(restaurant)
+                }}
+                key={restaurant.id}
+                position={{
+                  lat: restaurant.coordinates.lat,
+                  lng: restaurant.coordinates.lng,
+                }}
+              />
+            ))
+            )}
+
+            {type && !selection && (
+             restaurants.filter((r) => r.type == type).map((restaurant) => (
+              <Marker
+                onClick={() => {
+                  setSelectedRestaurant(restaurant)
+                }}
+                key={restaurant.id}
+                position={{
+                  lat: restaurant.coordinates.lat,
+                  lng: restaurant.coordinates.lng,
+                }}
+              />
+            ))
+            )}
+
+            {selection && !type && (
+              restaurants.filter((r) => r.selection == selection).map((restaurant) => (
+                <Marker
+                  onClick={() => {
+                    setSelectedRestaurant(restaurant)
+                  }}
+                  key={restaurant.id}
+                  position={{
+                    lat: restaurant.coordinates.lat,
+                    lng: restaurant.coordinates.lng,
+                  }}
+                />
+              ))
+            )}
+
+            {selection && type && (
+               restaurants.filter((r) => r.type == type && r.selection == selection).map((restaurant) => (
+                <Marker
+                  onClick={() => {
+                    setSelectedRestaurant(restaurant)
+                  }}
+                  key={restaurant.id}
+                  position={{
+                    lat: restaurant.coordinates.lat,
+                    lng: restaurant.coordinates.lng,
+                  }}
+                />
+              ))
+            )}
+          </>
+        )}
 
             {/**Show info window for clicked marker/restaurant on map */}
             {selectedRestaurant && (

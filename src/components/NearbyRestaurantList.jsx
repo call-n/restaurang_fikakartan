@@ -3,55 +3,17 @@ import useStreamCollection from "../hooks/useStreamCollection"
 import Form from "react-bootstrap/Form"
 import RestaurantListCard from "./RestaurantListCard"
 
-const NearbyRestaurantList = ({ city }) => {
+const NearbyRestaurantList = ({ city, type, selection }) => {
   const { data: data } = useStreamCollection("restaurants")
 
   const restaurants = data.filter((r) => r.city == city)
 
-  const [typeFilter, setTypeFilter] = useState("")
-  const [selectionFilter, setSelectionFilter] = useState("")
-
-
   return (
     <>
-      <Form.Group className="m-3">
-        <Form.Label>Type</Form.Label>
-        <Form.Select
-          onChange={(e) => {
-            setTypeFilter(e.target.value)
-          }}
-          defaultValue="all"
-          className="w-25"
-        >
-          <option value="">All</option>
-          <option value="fastfood">Fast food</option>
-          <option value="foodtruck">Food truck</option>
-          <option value="cafe">Café</option>
-          <option value="pizzarias">Pizza</option>
-        </Form.Select>
-      </Form.Group>
-
-      <Form.Group className="m-3">
-        <Form.Label>Selection</Form.Label>
-        <Form.Select
-          onChange={(e) => {
-            setSelectionFilter(e.target.value)
-          }}
-          defaultValue="all"
-          className="w-25"
-        >
-          <option value="">All</option>
-          <option value="lunch">Lunch</option>
-          <option value="dinner">Dinner</option>
-          <option value="afterwork">AW</option>
-          <option value="fika">Fika</option>
-        </Form.Select>
-      </Form.Group>
-
       <div className="list">
-        {!city && (
+       {!city && (
           <>
-            {!typeFilter && !selectionFilter && (
+            {!type && !selection && (
               <ul>
                 <h2>All restaurants</h2>
                 {data.map((r) => (
@@ -62,11 +24,11 @@ const NearbyRestaurantList = ({ city }) => {
               </ul>
             )}
 
-            {typeFilter && !selectionFilter && (
+            {type && !selection && (
               <ul>
-                <h2>All restaurants filterd by {typeFilter}</h2>
+                <h2>All restaurants filterd by {type}</h2>
                 {data
-                  .filter((r) => r.type === typeFilter)
+                  .filter((r) => r.type === type)
                   .map((r) => (
                     <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
@@ -75,11 +37,11 @@ const NearbyRestaurantList = ({ city }) => {
               </ul>
             )}
 
-            {selectionFilter && !typeFilter && (
+            {selection && !type && (
               <ul>
-                <h2>All restaurants filterd by {selectionFilter}</h2>
+                <h2>All restaurants filterd by {selection}</h2>
                 {data
-                  .filter((r) => r.selection === selectionFilter)
+                  .filter((r) => r.selection === selection)
                   .map((r) => (
                     <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
@@ -88,15 +50,15 @@ const NearbyRestaurantList = ({ city }) => {
               </ul>
             )}
 
-            {selectionFilter && typeFilter && (
+            {selection && type && (
               <ul>
                 <h2>
-                  All restaurants filterd by {selectionFilter} and {typeFilter}
+                  All restaurants filterd by {selection} and {type}
                 </h2>
                 {data
                   .filter(
                     (r) =>
-                      r.type === typeFilter && r.selection === selectionFilter
+                      r.type === type && r.selection === selection
                   )
                   .map((r) => (
                     <li key={r.id}>
@@ -110,7 +72,7 @@ const NearbyRestaurantList = ({ city }) => {
 
         {city && (
           <>
-            {!typeFilter && !selectionFilter && (
+            {!type && !selection && (
               <ul>
                 <h2>All restaurants in {city}</h2>
                 {restaurants.map((r) => (
@@ -121,11 +83,11 @@ const NearbyRestaurantList = ({ city }) => {
               </ul>
             )}
 
-            {typeFilter && !selectionFilter && (
+            {type && !selection && (
               <ul>
-                <h2>All restaurants in {city} filterd by {typeFilter}</h2>
+                <h2>All restaurants in {city} filterd by {type}</h2>
                 {restaurants
-                  .filter((r) => r.type === typeFilter)
+                  .filter((r) => r.type === type)
                   .map((r) => (
                     <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
@@ -134,11 +96,11 @@ const NearbyRestaurantList = ({ city }) => {
               </ul>
             )}
 
-            {selectionFilter && !typeFilter && (
+            {selection && !type && (
               <ul>
-                <h2>All restaurants in {city} filterd by {selectionFilter}</h2>
+                <h2>All restaurants in {city} filterd by {selection}</h2>
                 {restaurants
-                  .filter((r) => r.selection === selectionFilter)
+                  .filter((r) => r.selection === selection)
                   .map((r) => (
                     <li key={r.id}>
                       <RestaurantListCard restaurant={r} />
@@ -147,15 +109,15 @@ const NearbyRestaurantList = ({ city }) => {
               </ul>
             )}
 
-            {selectionFilter && typeFilter && (
+            {selection && type && (
               <ul>
                 <h2>
-                  All restaurants in {city} filterd by {selectionFilter} and {typeFilter}
+                  All restaurants in {city} filterd by {selection} and {type}
                 </h2>
                 {restaurants
                   .filter(
                     (r) =>
-                      r.type === typeFilter && r.selection === selectionFilter
+                      r.type === type && r.selection === selection
                   )
                   .map((r) => (
                     <li key={r.id}>
