@@ -12,7 +12,7 @@ import Directions from './Directions'
 import {Link} from 'react-router-dom'
 import { useSearchParams } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
-
+import {useRef} from 'react'
 
 
 const libraries = ['places']
@@ -43,6 +43,7 @@ const Map = () => {
 
 
     const [searchParams, setSeachParams] = useSearchParams()
+
 
 
     // filter restaurant for searched city
@@ -77,7 +78,16 @@ const Map = () => {
         if(searchParams.get('city') ) { 
             handleSubmit(searchParams.get('city'))
         }
-    }, [searchParams]) 
+
+        if(searchParams.get('type') ) { 
+          setType(searchParams.get('type'))
+        }
+
+        if(searchParams.get('selection') ) { 
+          setSelection(searchParams.get('selection'))
+        }
+
+    },[searchParams])
 
   return (
     <>
@@ -109,8 +119,9 @@ const Map = () => {
               <Form.Select
                 onChange={(e) => {
                   setType(e.target.value)
+                  setSeachParams({type: e.target.value})
                 }}
-                defaultValue="all"
+                defaultValue={searchParams.get('type')}
                 className="w-25"
               >
                 <option value="">All</option>
@@ -126,8 +137,9 @@ const Map = () => {
               <Form.Select
                 onChange={(e) => {
                   setSelection(e.target.value)
+                  setSeachParams({selection: e.target.value})
                 }}
-                defaultValue="all"
+                defaultValue={searchParams.get('selection')}
                 className="w-25"
               >
                 <option value="">All</option>
